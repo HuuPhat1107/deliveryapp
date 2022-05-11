@@ -7,9 +7,9 @@ class OrderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User)
-admin.site.register(Order)
-admin.site.register(Shipper)
-admin.site.register(Status)
-admin.site.register(ShippingMethod)
-admin.site.register(Customer)
+# admin.site.register(Order)
+# admin.site.register(Shipper)
+# admin.site.register(Status)
+# admin.site.register(ShippingMethod)
+# admin.site.register(Customer)
 

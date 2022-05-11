@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'delivery.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'deliveryapp',
+        'NAME': 'delivery',
         'USER': 'root',
         'PASSWORD': '12345678',
         'HOST': ''
