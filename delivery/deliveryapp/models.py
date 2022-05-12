@@ -11,12 +11,12 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-
-class Category(models.Model):
-    name = models.CharField(max_length=100, null=False, unique=True)
-
-    def __str__(self):
-        return self.name
+#
+# class Category(models.Model):
+#     name = models.CharField(max_length=100, null=False, unique=True)
+#
+#     def __str__(self):
+#         return self.name
 
 
 class ModelBase(models.Model):
@@ -28,13 +28,11 @@ class ModelBase(models.Model):
         abstract = True
 
 
-# class ShippingMethod(ModelBase):
-#     name = models.CharField(max_length=100, unique=True)
-#
-#     def __str__(self):
-#         return self.name
+class Cash(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    cash = models.CharField(max_length=255, blank=True)
 
-# Danh gia
+
 class Status(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
@@ -46,63 +44,61 @@ class Order(ModelBase):
     order_name = models.CharField(max_length=100, null=False)
     note = models.CharField(max_length=255, blank=True)
     image = models.ImageField(null=True, blank=True, upload_to='orders/%Y/%m')
-    # shipping_method = models.ForeignKey(ShippingMethod,
-    #                                     null=True,
-    #                                     default=1,
-    #                                     on_delete=models.CASCADE,
-    #                                     )
-    customer = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="orders")
+    customer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="orders_customer")
     status = models.ForeignKey(Status, null=True, default=1, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.order_name
 
 
+class ShipperReceiver(models.Model):
+    order = models.OneToOneField(Order, null=True, on_delete=models.CASCADE)
+    shipper = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    price = models.CharField(max_length=255, null=True, blank=True)
+
+
 class Address(models.Model):
-    address = models.CharField(max_length=30)
+    name = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.address
+        return self.name
 
 
-# class OrderDetail(ModelBase):
-#     quality = models.CharField(max_length=2)
-#     description = models.TextField(null=True, blank=True)
-#     name = models.CharField(max_length=200, null=True)
-#     image = models.ImageField(null=True, upload_to='products/%Y/%m')
-#     phone_cus = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-#     phone_shipper = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-#     note = models.TextField()
-#     total = models.CharField(max_length=200, blank=True)
-#     area = models.ForeignKey(Address, null=True, on_delete=models.CASCADE)
+class OrderDetail(ModelBase):
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, primary_key=True)
+    quality = models.CharField(max_length=2)
+    description = models.TextField(null=True, blank=True)
+    name = models.CharField(max_length=200, null=True)
+    image = models.ImageField(null=True, upload_to='products/%Y/%m')
+    phone_cus = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    note = models.TextField(null=True, blank=True)
+    area = models.ForeignKey(Address, null=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+# class ActionBase(models.Model):
+#     shipper = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ship")
+#     created_date = models.DateTimeField(auto_now_add=True)
+#     updated_date = models.DateTimeField(auto_now=True)
 #
-#     def __str__(self):
-#         return self.name
+#     class Meta:
+#         unique_together=('ship')
+#         abstract=True
+#
 
-
-class ActionBase(models.Model):
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
-    shipper = models.ForeignKey(User, on_delete=models.CASCADE)
+class Rating(models.Model):
+    shipper = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ship", null=True)
+    customer = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name= "customer")
+    star = models.TextField(null=True, blank=True)
+    comment = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        unique_together=('customer', 'shipper')
-        abstract=True
-
-
-class Rating(ActionBase):
-    rate = models.SmallIntegerField(default=0)
-    shipper = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    star = models.CharField(max_length=5, null=False)
-    comment = models.TextField()
-
 
 class AuctionHistory(models.Model):
-    shipper = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
-    price = models.TextField()
-
-
-
+    shipper = models.ForeignKey(User, on_delete=models.CASCADE, related_name="shipper", null=True)
+    order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL, related_name="order")
+    price = models.TextField(null=True, blank=True)
 

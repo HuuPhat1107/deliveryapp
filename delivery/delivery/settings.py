@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'deliveryapp.apps.DeliveryappConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -77,10 +78,13 @@ WSGI_APPLICATION = 'delivery.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'delivery',
+        'NAME': 'deliveryapp',
         'USER': 'root',
         'PASSWORD': '12345678',
-        'HOST': ''
+        'HOST': '',
+        'OPTIONS': {
+         "init_command": "SET foreign_key_checks = 0;",
+        },
     }
 }
 
