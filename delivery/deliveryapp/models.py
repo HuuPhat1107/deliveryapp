@@ -43,7 +43,6 @@ class Status(models.Model):
 class Order(ModelBase):
     order_name = models.CharField(max_length=100, null=False)
     note = models.CharField(max_length=255, blank=True)
-    image = models.ImageField(null=True, blank=True, upload_to='orders/%Y/%m')
     customer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="orders_customer")
     status = models.ForeignKey(Status, null=True, default=1, on_delete=models.SET_NULL)
 
@@ -69,7 +68,7 @@ class OrderDetail(ModelBase):
     quality = models.CharField(max_length=2)
     description = models.TextField(null=True, blank=True)
     name = models.CharField(max_length=200, null=True)
-    image = models.ImageField(null=True, upload_to='products/%Y/%m')
+    image = models.ImageField(null=True, upload_to='orders/%Y/%m')
     phone_cus = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     note = models.TextField(null=True, blank=True)
     area = models.ForeignKey(Address, null=True, on_delete=models.CASCADE)
@@ -86,11 +85,30 @@ class OrderDetail(ModelBase):
 #     class Meta:
 #         unique_together=('ship')
 #         abstract=True
-#
+
+class ActionBase(models.Model):
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cus")
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        # unique_together=('cus')
+        abstract=True
+
+
+class Action(ActionBase):
+    LIKE, HAHA, HEART = range(3)
+    ACTIONS = [
+        (LIKE, 'like'),
+        (HAHA, 'haha'),
+        (HEART, 'heart')
+    ]
+    type = models.PositiveSmallIntegerField(choices=ACTIONS, default=LIKE)
+
 
 class Rating(models.Model):
     shipper = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ship", null=True)
-    customer = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name= "customer")
+    customer = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="customer")
     star = models.TextField(null=True, blank=True)
     comment = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -101,4 +119,3 @@ class AuctionHistory(models.Model):
     shipper = models.ForeignKey(User, on_delete=models.CASCADE, related_name="shipper", null=True)
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL, related_name="order")
     price = models.TextField(null=True, blank=True)
-
