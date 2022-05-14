@@ -72,6 +72,14 @@ class OrderDetail(ModelBase):
     phone_cus = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     note = models.TextField(null=True, blank=True)
     area = models.ForeignKey(Address, null=True, on_delete=models.CASCADE)
+    tags = models.ManyToManyField('Tag')
+
+    def __str__(self):
+        return self.name
+
+
+class Tag(ModelBase):
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
