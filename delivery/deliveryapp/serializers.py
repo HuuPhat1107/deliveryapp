@@ -8,7 +8,9 @@ class UserSerializers(serializers.ModelSerializer):
         groups = validated_data.pop('groups')
         user = User(**validated_data)
         user.set_password(user.password)
+        create_cash = Cash(user=user)
         user.save()
+        create_cash.save()
         for group in groups:
             user.groups.add(group)
 
@@ -27,35 +29,51 @@ class UserSerializers(serializers.ModelSerializer):
 
             return request.build_absolute_uri(path)
 
+    cash = serializers.CharField(source='cash.cash', read_only=True)
+
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name',
                   'username', 'password', 'email', 'avatar'
-                  , 'groups']
+                  , 'groups', 'CCCD', 'sex', 'address', 'phone', 'cash']
         extra_kwargs = {
             'password': {
                 'write_only': True
+            },
+            'cash': {
+                'read_only': True
             }
         }
 
 
-class TagSeriazlier(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = "__all__"
-
-
 class OrderSerializers(serializers.ModelSerializer):
+
+    def update(self, instance, validated_data):
+        fields = instance._meta.fields
+        exclude = []
+        for field in fields:
+            field = field.name.split('.')[-1]
+            if field in exclude:
+                continue
+            exec("instance.%s = validated_data.get(field, instance.%s)" % (field, field))
+        instance.save()
+        return instance
 
     class Meta:
         model = Order
-        fields = ['id', 'order_name', 'note',
-                  'created_date', 'updated_date', 'active']
+        fields = ['id', 'order_name', 'customer',
+                  'created_date', 'updated_date', 'status']
 
+
+class UserPhoneSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['phone']
 
 class OrderDetailSerializer(OrderSerializers):
     # tags = TagSeriazlier(many=True)
-    order = OrderSerializers(read_only=True)
+    order = OrderSerializers()
+    phone_cus = serializers.CharField(source='phone_cus.phone', read_only=True)
 
     image = SerializerMethodField()
 
@@ -70,6 +88,4 @@ class OrderDetailSerializer(OrderSerializers):
 
     class Meta:
         model = OrderDetail
-        fields = ['order', 'description', 'name',
-                                                 'image', 'phone_cus', 'note', 'area']
-
+        fields = ['order', 'description', 'quality', 'image', 'phone_cus', 'note', 'area']

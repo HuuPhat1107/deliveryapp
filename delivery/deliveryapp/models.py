@@ -4,9 +4,10 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     avatar = models.ImageField(null=True, upload_to='users/%Y/%m')
-    CCCD = models.CharField(max_length=12, unique=True, null=True)
-    phone = models.CharField(max_length=10, blank=True, null=True)
-    sex = models.CharField(max_length=5, blank=True)
+    CCCD = models.CharField(max_length=12, null=True)
+    phone = models.CharField(max_length=10, null=True)
+    sex = models.CharField(max_length=10, default="Nam")
+    address = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return self.username
@@ -30,7 +31,10 @@ class ModelBase(models.Model):
 
 class Cash(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    cash = models.CharField(max_length=255, blank=True)
+    cash = models.CharField(max_length=255, default=0)
+
+    def __str__(self):
+        return self.cash
 
 
 class Status(models.Model):
@@ -42,7 +46,6 @@ class Status(models.Model):
 # Don hang
 class Order(ModelBase):
     order_name = models.CharField(max_length=100, null=False)
-    note = models.CharField(max_length=255, blank=True)
     customer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="orders_customer")
     status = models.ForeignKey(Status, null=True, default=1, on_delete=models.SET_NULL)
 
@@ -51,13 +54,13 @@ class Order(ModelBase):
 
 
 class ShipperReceiver(models.Model):
-    order = models.OneToOneField(Order, null=True, on_delete=models.CASCADE)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, primary_key=True)
     shipper = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    price = models.CharField(max_length=255, null=True, blank=True)
+    price = models.CharField(max_length=255, default=0)
 
 
 class Address(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
 
     def __str__(self):
         return self.name
@@ -67,22 +70,13 @@ class OrderDetail(ModelBase):
     order = models.OneToOneField(Order, on_delete=models.CASCADE, primary_key=True)
     quality = models.CharField(max_length=2)
     description = models.TextField(null=True, blank=True)
-    name = models.CharField(max_length=200, null=True)
     image = models.ImageField(null=True, upload_to='orders/%Y/%m')
     phone_cus = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     note = models.TextField(null=True, blank=True)
     area = models.ForeignKey(Address, null=True, on_delete=models.CASCADE)
-    tags = models.ManyToManyField('Tag')
 
     def __str__(self):
-        return self.name
-
-
-class Tag(ModelBase):
-    name = models.CharField(max_length=50, unique=True)
-
-    def __str__(self):
-        return self.name
+        return self.order.order_name
 
 
 # class ActionBase(models.Model):
@@ -94,30 +88,30 @@ class Tag(ModelBase):
 #         unique_together=('ship')
 #         abstract=True
 
-class ActionBase(models.Model):
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cus")
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        # unique_together=('cus')
-        abstract=True
-
-
-class Action(ActionBase):
-    LIKE, HAHA, HEART = range(3)
-    ACTIONS = [
-        (LIKE, 'like'),
-        (HAHA, 'haha'),
-        (HEART, 'heart')
-    ]
-    type = models.PositiveSmallIntegerField(choices=ACTIONS, default=LIKE)
+# class ActionBase(models.Model):
+#     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cus")
+#     created_date = models.DateTimeField(auto_now_add=True)
+#     updated_date = models.DateTimeField(auto_now=True)
+#
+#     class Meta:
+#         # unique_together=('cus')
+#         abstract=True
+#
+#
+# class Action(ActionBase):
+#     LIKE, HAHA, HEART = range(3)
+#     ACTIONS = [
+#         (LIKE, 'like'),
+#         (HAHA, 'haha'),
+#         (HEART, 'heart')
+#     ]
+#     type = models.PositiveSmallIntegerField(choices=ACTIONS, default=LIKE)
 
 
 class Rating(models.Model):
-    shipper = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ship", null=True)
-    customer = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="customer")
-    star = models.TextField(null=True, blank=True)
+    shipper = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ship")
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="customer")
+    star = models.CharField(max_length=5)
     comment = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -126,4 +120,9 @@ class Rating(models.Model):
 class AuctionHistory(models.Model):
     shipper = models.ForeignKey(User, on_delete=models.CASCADE, related_name="shipper", null=True)
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL, related_name="order")
-    price = models.TextField(null=True, blank=True)
+    price = models.CharField(max_length=255, default=0)
+
+
+class Bill(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE)

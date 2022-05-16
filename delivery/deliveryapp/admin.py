@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
+from django.contrib.auth.admin import UserAdmin
 
 from .models import *
 
@@ -10,7 +11,7 @@ class AutionHistoryAdmin(admin.ModelAdmin):
     list_display = ['id', 'shipper']
 
 
-class UserAdmin(admin.ModelAdmin):
+class CusUser(UserAdmin):
     def group(self, user):
         groups = []
         for group in user.groups.all():
@@ -20,13 +21,13 @@ class UserAdmin(admin.ModelAdmin):
     group.short_description = 'Groups'
 
     search_fields = ['first_name', 'last_name', 'sex']
-    list_display = ['id', 'username', 'sex', 'first_name', 'last_name', 'email', 'is_staff', 'group']
+    list_display = ['id', 'username', 'sex', 'CCCD', 'first_name', 'last_name', 'email', 'is_staff', 'group']
 
 
 class OrderAdmin(admin.ModelAdmin):
-    search_fields = ['order_name', 'note']
-    list_filter = ['order_name', 'note', 'customer', 'status']
-    list_display = ['order_name', 'note', 'customer', 'status']
+    search_fields = ['order_name']
+    list_filter = ['order_name', 'customer', 'status']
+    list_display = ['order_name', 'customer', 'status']
     # readonly_fields = ['image_view']
 
     # def image_view(self, Order):
@@ -46,7 +47,7 @@ class CashAdmin(admin.ModelAdmin):
     list_display = ['user', 'cash']
 
 
-admin.site.register(User, UserAdmin)
+admin.site.register(User, CusUser)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderDetail)
 admin.site.register(Cash, CashAdmin)
@@ -54,4 +55,3 @@ admin.site.register(Status)
 admin.site.register(Rating, RatingAdmin)
 admin.site.register(AuctionHistory, AutionHistoryAdmin)
 admin.site.register(Address)
-admin.site.register(Tag)

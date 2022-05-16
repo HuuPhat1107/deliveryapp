@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-6q3xd80&v!^05g_5c^!l6d1&zo5g1&1fvmann^7(655zlvpks6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'oauth2_provider',
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -49,27 +50,33 @@ REST_FRAMEWORK = {
     )
 }
 
-#
-# OAUTH2_PROVIDER = {
-#     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore',
-# }
-
-
 OAUTH2_INFO = {
-    "client_id": "geY8NYICpwBIFgeNieAWX8I3wJqsEoSe93xCfqQn",
-    "client_secret": "HU0XtgpDhSvIprNsVNZfnfkUpESRmcgAB4Gb2qZ2CiP53Akc4N0vzRqiialATQ3adkTcf5EafPkVAXr1OSCiIdQlmG1aFIXmFO89vCsjoPKFzAKCz5zqHVQTVnWGA2i2",
+    "client_id": "s3sM1XCB2Bw3Z3lSaKr14FG4xOXFo14e1Un1GEfx",
+    "client_secret" : "culzMWMwzKdNFSMPPghOVu4ixpHNHLMX4w5evKWSR5kPlniv3mYlzBim4Ia74iLGIeR8Nnnp7cfTdi9FsXwdQoYi4LO3fwuGOtmR8dzuId9pv9HYHn5vxzv3g9rUoPm9"
 }
 
+
+# OAUTH2_PROVIDER = {
+#      'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ORIGIN_WHITELIST = (
+#     'http://localhost:3000/',
+# )
 
 ROOT_URLCONF = 'delivery.urls'
 
@@ -100,7 +107,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'deliveryapp',
         'USER': 'root',
-        'PASSWORD': '12345678',
+        'PASSWORD': 'letuandat',
         'HOST': '',
         'OPTIONS': {
          "init_command": "SET foreign_key_checks = 0;",
