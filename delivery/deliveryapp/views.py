@@ -5,8 +5,8 @@ from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
-from .models import User, Order, OrderDetail, Status
-from .serializers import UserSerializers, OrderSerializers, OrderDetailSerializer
+from .models import User, Order, OrderDetail, Status, Cash, Address
+from .serializers import UserSerializers, OrderSerializers, OrderDetailSerializer, CashSerializer, AddressSerializer, StatusSerializer
 from .paginators import BasePagination
 from django.http import Http404
 from django.conf import settings
@@ -86,6 +86,19 @@ class OrderDetailViewSet(viewsets.ModelViewSet):
     queryset = OrderDetail.objects.filter(active=True)
     serializer_class = OrderDetailSerializer
 
+
+class CashViewSet(viewsets.ViewSet, generics.UpdateAPIView):
+    queryset = Cash
+    serializer_class = CashSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+class AddressViewSet(viewsets.ViewSet, generics.ListAPIView):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+
+class StatusViewSet(viewsets.ViewSet, generics.ListAPIView):
+    queryset = Status.objects.all()
+    serializer_class = StatusSerializer
 
 def index(request):
     return HttpResponse("Delivery App")

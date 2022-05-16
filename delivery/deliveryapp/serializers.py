@@ -75,6 +75,15 @@ class OrderDetailSerializer(OrderSerializers):
     order = OrderSerializers()
     phone_cus = serializers.CharField(source='phone_cus.phone', read_only=True)
 
+    def create(self, validated_data):
+        order_data = validated_data.pop('order')
+        order = Order(**order_data)
+        order.save()
+        order_detail = OrderDetail(order=order, **validated_data)
+        order_detail.save()
+
+        return order_detail
+
     image = SerializerMethodField()
 
     def get_image(self, order):
@@ -88,4 +97,28 @@ class OrderDetailSerializer(OrderSerializers):
 
     class Meta:
         model = OrderDetail
-        fields = ['order', 'description', 'quality', 'image', 'phone_cus', 'note', 'area']
+        fields = ['order', 'description', 'image', 'quality', 'phone_cus', 'note', 'area']
+
+class CashSerializer(serializers.ModelSerializer):
+
+    def update(self, instance, validated_data):
+        cash = validated_data.pop('cash')
+        instance.cash = str(int(cash) + int(instance.cash))
+        instance.save()
+        return instance
+
+    class Meta:
+        model = Cash
+        fields = ['cash']
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ['id', 'name']
+
+
+class StatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Status
+        fields = ['id', 'name']
