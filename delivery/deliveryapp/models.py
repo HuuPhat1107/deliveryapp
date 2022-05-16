@@ -31,7 +31,7 @@ class ModelBase(models.Model):
 
 class Cash(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    cash = models.CharField(max_length=255, default=0)
+    cash = models.IntegerField(max_length=255, default=0)
 
     def __str__(self):
         return self.cash
@@ -56,7 +56,7 @@ class Order(ModelBase):
 class ShipperReceiver(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE, primary_key=True)
     shipper = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    price = models.CharField(max_length=255, default=0)
+    price = models.IntegerField(default=0)
 
 
 class Address(models.Model):
@@ -68,7 +68,7 @@ class Address(models.Model):
 
 class OrderDetail(ModelBase):
     order = models.OneToOneField(Order, on_delete=models.CASCADE, primary_key=True)
-    quality = models.CharField(max_length=2)
+    quality = models.IntegerField(max_length=255, default=1)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, upload_to='orders/%Y/%m')
     phone_cus = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
@@ -111,7 +111,7 @@ class OrderDetail(ModelBase):
 class Rating(models.Model):
     shipper = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ship")
     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="customer")
-    star = models.CharField(max_length=5)
+    star = models.IntegerField(max_length=5, default=0)
     comment = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -120,7 +120,7 @@ class Rating(models.Model):
 class AuctionHistory(models.Model):
     shipper = models.ForeignKey(User, on_delete=models.CASCADE, related_name="shipper", null=True)
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL, related_name="order")
-    price = models.CharField(max_length=255, default=0)
+    price = models.IntegerField(max_length=255, default=0)
 
 
 class Bill(models.Model):
