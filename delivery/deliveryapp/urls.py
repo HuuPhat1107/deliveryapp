@@ -11,6 +11,8 @@ router.register("order", views.OrderViewSet, "order")
 router.register("cash", views.CashViewSet, "cash")
 router.register("address", views.AddressViewSet, "address")
 router.register("status", views.StatusViewSet, "status")
+router.register("shipperreceivers", views.ShipperReceiverViewSet, "shipperreceiver")
+router.register("rating", views.RatingViewSet, "rating")
 
 urlpatterns = [
     path('', include(router.urls)),

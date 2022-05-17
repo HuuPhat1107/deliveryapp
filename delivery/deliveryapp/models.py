@@ -31,7 +31,7 @@ class ModelBase(models.Model):
 
 class Cash(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    cash = models.IntegerField(max_length=255, default=0)
+    cash = models.IntegerField(default=0)
 
     def __str__(self):
         return self.cash
@@ -46,16 +46,18 @@ class Status(models.Model):
 # Don hang
 class Order(ModelBase):
     order_name = models.CharField(max_length=100, null=False)
-    customer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="orders_customer")
+    customer = models.ForeignKey(User, null=True,
+                                 on_delete=models.SET_NULL, related_name="orders_customer")
     status = models.ForeignKey(Status, null=True, default=1, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.order_name
 
 
-class ShipperReceiver(models.Model):
-    order = models.OneToOneField(Order, on_delete=models.CASCADE, primary_key=True)
-    shipper = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+class ShipperReceiver(ModelBase):
+    order = models.OneToOneField(Order, on_delete=models.CASCADE,
+                                 primary_key=True, related_name="ShipperR")
+    shipper = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="ShipperReceiver")
     price = models.IntegerField(default=0)
 
 
@@ -68,7 +70,7 @@ class Address(models.Model):
 
 class OrderDetail(ModelBase):
     order = models.OneToOneField(Order, on_delete=models.CASCADE, primary_key=True)
-    quality = models.IntegerField(max_length=255, default=1)
+    quality = models.IntegerField(default=1)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, upload_to='orders/%Y/%m')
     phone_cus = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
@@ -111,7 +113,7 @@ class OrderDetail(ModelBase):
 class Rating(models.Model):
     shipper = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ship")
     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="customer")
-    star = models.IntegerField(max_length=5, default=0)
+    star = models.IntegerField(default=0)
     comment = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -120,7 +122,7 @@ class Rating(models.Model):
 class AuctionHistory(models.Model):
     shipper = models.ForeignKey(User, on_delete=models.CASCADE, related_name="shipper", null=True)
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL, related_name="order")
-    price = models.IntegerField(max_length=255, default=0)
+    price = models.IntegerField(default=0)
 
 
 class Bill(models.Model):

@@ -48,17 +48,6 @@ class UserSerializers(serializers.ModelSerializer):
 
 class OrderSerializers(serializers.ModelSerializer):
 
-    def update(self, instance, validated_data):
-        fields = instance._meta.fields
-        exclude = []
-        for field in fields:
-            field = field.name.split('.')[-1]
-            if field in exclude:
-                continue
-            exec("instance.%s = validated_data.get(field, instance.%s)" % (field, field))
-        instance.save()
-        return instance
-
     class Meta:
         model = Order
         fields = ['id', 'order_name', 'customer',
@@ -69,6 +58,7 @@ class UserPhoneSerializers(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['phone']
+
 
 class OrderDetailSerializer(OrderSerializers):
     # tags = TagSeriazlier(many=True)
@@ -99,6 +89,7 @@ class OrderDetailSerializer(OrderSerializers):
         model = OrderDetail
         fields = ['order', 'description', 'image', 'quality', 'phone_cus', 'note', 'area']
 
+
 class CashSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
@@ -122,3 +113,22 @@ class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Status
         fields = ['id', 'name']
+
+
+class ShipperReceiverSerializer(serializers.ModelSerializer):
+    order = OrderSerializers()
+    class Meta:
+        model = ShipperReceiver
+        fields = "__all__"
+
+
+class AutionHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AuctionHistory
+        fields = "__all__"
+
+
+class RatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rating
+        fields = "__all__"

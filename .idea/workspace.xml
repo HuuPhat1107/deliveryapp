@@ -2,10 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="abaf5a59-b44e-4402-9747-acc2e9f8c80f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/deliveryapp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deliveryapp.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delivery/delivery/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/delivery/delivery/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/delivery/deliveryapp/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/migrations/0002_alter_user_options_alter_user_address_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/migrations/0003_alter_user_cccd.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/migrations/0004_alter_user_options_alter_user_unique_together_and_more.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/delivery/deliveryapp/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/delivery/deliveryapp/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/delivery/deliveryapp/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/delivery/deliveryapp/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +45,9 @@
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="E:/HD/IT2022-RestfulApiDemo/RestApisV1" />
   </component>
   <component name="RunManager" selected="Python.0001_initial">
     <configuration name="0001_initial" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">

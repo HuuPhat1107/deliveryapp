@@ -5,8 +5,9 @@ from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
-from .models import User, Order, OrderDetail, Status, Cash, Address
-from .serializers import UserSerializers, OrderSerializers, OrderDetailSerializer, CashSerializer, AddressSerializer, StatusSerializer
+from .models import User, Order, OrderDetail, Status, Cash, Address, ShipperReceiver, AuctionHistory, Rating
+from .serializers import UserSerializers, OrderSerializers, OrderDetailSerializer, CashSerializer,\
+    AddressSerializer, StatusSerializer, ShipperReceiverSerializer, AutionHistorySerializer, RatingSerializer
 from .paginators import BasePagination
 from django.http import Http404
 from django.conf import settings
@@ -28,57 +29,47 @@ class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):
         return Response(self.serializer_class(request.user, context={"request": request}).data,
                         status=status.HTTP_200_OK)
 
+    @action(methods=['get'], detail=True, url_path="ShipperReceiver")
+    def get_shipper(self, request, pk):
+        shipper = User.objects.get(pk=pk).ShipperReceiver.filter(active=True)
+
+        return Response(ShipperReceiverSerializer(shipper, many=True).data, status=status.HTTP_200_OK)
+
+    @action(methods=['get'], detail=True, url_path="orders_customer")
+    def get_cus(self, request, pk):
+        customer = User.objects.get(pk=pk).orders_customer.filter(active=True)
+
+        return Response(OrderSerializers(customer, many=True).data, status=status.HTTP_200_OK)
+
+    @action(methods=['get'], detail=True, url_path="shipper")
+    def get_shipper_history(self, request, pk):
+        shipper = User.objects.get(pk=pk).shipper.filter(active=True)
+        return Response(AutionHistorySerializer(shipper, many=True).data, status=status.HTTP_200_OK)
+
 
 class AuthInfo(APIView):
     def get(self, request):
         return Response(settings.OAUTH2_INFO, status=status.HTTP_200_OK)
 
-#
-# class OrderViewSet(viewsets.ModelViewSet, generics.ListAPIView, generics.RetrieveAPIView):
-#     # queryset = Order.objects.filter(active=True)
-#     # serializer_class = OrderSerializers
-#     # pagination_class = BasePagination
-#     #
-#     # def get_queryset(self):
-#     #     order = Order.objects.filter(active=True)
-#     #
-#     #     q = self.request.query_params.get('q')
-#     #     if q is not None:
-#     #         order = Order.filter(subject__icontains=q)
-#     #
-#     #     order_id = self.request.query_params.get('product')
-#     #
-#     #     if order_id is not None:
-#     #         order = order.filter(product=order_id)
-#     #
-#     #     return order
-#     queryset = Order.objects.filter(active=True)
-#     serializer_class = OrderSerializers
-#
-#     @action(methods=['post'], detail=True, url_path="tags")
-#     def add_tag(self, request, pk):
-#         try:
-#             order = self.get_object()
-#         except Http404:
-#             return Response(status=status.HTTP_404_NOT_FOUND)
-#         else:
-#             tags = request.data.get("tags")
-#             if tags is not None:
-#                 for tag in tags:
-#                     t, _ = Tag.objects.get_or_create(name=tag)
-#                     order.tags.add(t)
-#
-#                 order.save()
-#
-#                 return Response(self.serializer_class(order).data,
-#                                 status=status.HTTP_201_CREATED)
-#
-#         return Response(status=status.HTTP_404_NOT_FOUND)
 
-
-class OrderViewSet(viewsets.ViewSet, generics.RetrieveUpdateAPIView):
-    queryset = Order
+class OrderViewSet(viewsets.ModelViewSet, generics.ListAPIView, generics.RetrieveAPIView):
+    pagination_class = BasePagination
+    queryset = Order.objects.filter(active=True)
     serializer_class = OrderSerializers
+
+    def get_queryset(self):
+        order = Order.objects.filter(active=True)
+
+        q = self.request.query_params.get('q')
+        if q is not None:
+            order = Order.filter(order_name__icontains=q)
+
+        order_id = self.request.query_params.get('id')
+
+        if order_id is not None:
+            order = order.filter(id=order_id)
+
+        return order
 
 
 class OrderDetailViewSet(viewsets.ModelViewSet):
@@ -92,13 +83,22 @@ class CashViewSet(viewsets.ViewSet, generics.UpdateAPIView):
     serializer_class = CashSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
+
 class AddressViewSet(viewsets.ViewSet, generics.ListAPIView):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
+
 
 class StatusViewSet(viewsets.ViewSet, generics.ListAPIView):
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
 
-def index(request):
-    return HttpResponse("Delivery App")
+
+class ShipperReceiverViewSet(viewsets.ModelViewSet):
+    serializer_class = ShipperReceiverSerializer
+    pagination_class = BasePagination
+
+
+class RatingViewSet(viewsets.ModelViewSet):
+    serializer_class = RatingSerializer
+    queryset = Rating.objects.all()

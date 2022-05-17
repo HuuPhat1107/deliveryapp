@@ -51,14 +51,14 @@ REST_FRAMEWORK = {
 }
 
 OAUTH2_INFO = {
-    "client_id": "s3sM1XCB2Bw3Z3lSaKr14FG4xOXFo14e1Un1GEfx",
-    "client_secret" : "culzMWMwzKdNFSMPPghOVu4ixpHNHLMX4w5evKWSR5kPlniv3mYlzBim4Ia74iLGIeR8Nnnp7cfTdi9FsXwdQoYi4LO3fwuGOtmR8dzuId9pv9HYHn5vxzv3g9rUoPm9"
+    "client_id": "8N09Q1O7Ltxo6PMEV8i9N6NT3AgeSxiBlna0Y7UV",
+    "client_secret" : "tyAwumD0XatZuKxHFqnmzlBt5V0mhk5wMb6oBvJxOBKs6lKZqmO0t1tfdhBbAodrcfT35z6sZAldK3QUjAJa0SQsnDnOtrGus2UvGY4Tz0gDLMNVy0Y4KS1RYuinzopJ"
 }
 
 
-# OAUTH2_PROVIDER = {
-#      'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
-# }
+OAUTH2_PROVIDER = {
+     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -107,7 +107,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'deliveryapp',
         'USER': 'root',
-        'PASSWORD': 'letuandat',
+        'PASSWORD': '12345678',
         'HOST': '',
         'OPTIONS': {
          "init_command": "SET foreign_key_checks = 0;",
