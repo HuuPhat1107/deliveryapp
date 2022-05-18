@@ -46,6 +46,12 @@ class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):
         shipper = User.objects.get(pk=pk).shipper.filter(active=True)
         return Response(AutionHistorySerializer(shipper, many=True).data, status=status.HTTP_200_OK)
 
+    @action(methods=['get'], detail=True, url_path="shipper_rating")
+    def get_shipper_rating(self, request, pk):
+        shipper_rating = User.objects.get(pk=pk).ship.all()
+
+        return Response(RatingSerializer(shipper_rating, many=True, context={"request": request}).data, status=status.HTTP_200_OK)
+
 
 class AuthInfo(APIView):
     def get(self, request):
@@ -93,10 +99,16 @@ class StatusViewSet(viewsets.ViewSet, generics.ListAPIView):
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
 
+    @action(methods=['get'], detail=True, url_path="order-status")
+    def get_order(self, request, pk):
+        order = Status.objects.get(pk=pk).order_status.filter(active=True)
 
-class ShipperReceiverViewSet(viewsets.ModelViewSet):
-    serializer_class = ShipperReceiverSerializer
-    pagination_class = BasePagination
+        return Response(OrderSerializers(order, many=True).data, status=status.HTTP_200_OK)
+
+#
+# class ShipperReceiverViewSet(viewsets.ModelViewSet):
+#     serializer_class = ShipperReceiverSerializer
+#     pagination_class = BasePagination
 
 
 class RatingViewSet(viewsets.ModelViewSet):

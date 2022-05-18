@@ -34,7 +34,7 @@ class Cash(models.Model):
     cash = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.cash
+        return str(self.cash)
 
 
 class Status(models.Model):
@@ -48,7 +48,7 @@ class Order(ModelBase):
     order_name = models.CharField(max_length=100, null=False)
     customer = models.ForeignKey(User, null=True,
                                  on_delete=models.SET_NULL, related_name="orders_customer")
-    status = models.ForeignKey(Status, null=True, default=1, on_delete=models.SET_NULL)
+    status = models.ForeignKey(Status, null=True, default=1, on_delete=models.SET_NULL, related_name="order_status")
 
     def __str__(self):
         return self.order_name

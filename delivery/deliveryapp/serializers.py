@@ -94,7 +94,7 @@ class CashSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         cash = validated_data.pop('cash')
-        instance.cash = str(int(cash) + int(instance.cash))
+        instance.cash = cash + int(instance.cash)
         instance.save()
         return instance
 
@@ -129,6 +129,9 @@ class AutionHistorySerializer(serializers.ModelSerializer):
 
 
 class RatingSerializer(serializers.ModelSerializer):
+    shipper = UserSerializers()
+    customer = UserSerializers()
+
     class Meta:
         model = Rating
         fields = "__all__"
