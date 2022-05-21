@@ -51,8 +51,8 @@ REST_FRAMEWORK = {
 }
 
 OAUTH2_INFO = {
-    "client_id": "8N09Q1O7Ltxo6PMEV8i9N6NT3AgeSxiBlna0Y7UV",
-    "client_secret" : "tyAwumD0XatZuKxHFqnmzlBt5V0mhk5wMb6oBvJxOBKs6lKZqmO0t1tfdhBbAodrcfT35z6sZAldK3QUjAJa0SQsnDnOtrGus2UvGY4Tz0gDLMNVy0Y4KS1RYuinzopJ"
+    "client_id": "iBeEdDHAQazbt5CrMfk5lWduUj60fOh6vSxPfCP4",
+    "client_secret" : "DyjUOd7CnMHoy7e0nCpsUvhRbE7oUyPupYnJGMPHsCHzmT8EM5b0VAm0vReGTYUCVClWqmUGxenBCc65VvbxHMfWyEF5SEKhziBSLYSYUH1x3Bt8QIwy9H99PrxmFjF0"
 }
 
 
@@ -152,7 +152,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 MEDIA_ROOT = '%s/deliveryapp/static' % BASE_DIR
 
 # Default primary key field type

@@ -12,7 +12,11 @@ class UserSerializers(serializers.ModelSerializer):
         user.save()
         create_cash.save()
         for group in groups:
+            print(type(group))
             user.groups.add(group)
+            if group.name == "shipper":
+                user.is_active = False
+                user.save()
 
         return user
 
@@ -47,12 +51,23 @@ class UserSerializers(serializers.ModelSerializer):
 
 
 class OrderSerializers(serializers.ModelSerializer):
-
     class Meta:
         model = Order
         fields = ['id', 'order_name', 'customer',
                   'created_date', 'updated_date', 'status']
 
+class OrderStatusSerializer(serializers.ModelSerializer):
+
+    quality = serializers.IntegerField(source='orderdetail.quality')
+    description = serializers.CharField(source='orderdetail.description')
+    note = serializers.CharField(source='orderdetail.note')
+    image = serializers.ImageField(source='orderdetail.image')
+    area = serializers.IntegerField(source='orderdetail.area.id')
+
+    class Meta:
+        model = Order
+        fields = ['id', 'order_name', 'customer',
+                  'created_date', 'updated_date', 'status', 'quality', 'description', 'note', 'image', 'area']
 
 class UserPhoneSerializers(serializers.ModelSerializer):
     class Meta:
@@ -63,27 +78,31 @@ class UserPhoneSerializers(serializers.ModelSerializer):
 class OrderDetailSerializer(OrderSerializers):
     # tags = TagSeriazlier(many=True)
     order = OrderSerializers()
-    phone_cus = serializers.CharField(source='phone_cus.phone', read_only=True)
+    # phone = serializers.CharField(source='phone_cus.phone', read_only=True)
+    phone_cus = UserPhoneSerializers(read_only=True)
 
     def create(self, validated_data):
         order_data = validated_data.pop('order')
         order = Order(**order_data)
         order.save()
         order_detail = OrderDetail(order=order, **validated_data)
+        order_detail.phone_cus = order.customer
         order_detail.save()
 
         return order_detail
 
-    image = SerializerMethodField()
-
-    def get_image(self, order):
-        request = self.context['request']
-        name = order.image.name
-        if name.startswith("static/"):
-            path = '/%s' % name
-        else:
-            path = '/static/%s' % name
-        return request.build_absolute_uri(path)
+    # image = SerializerMethodField()
+    #
+    # def get_image(self, order):
+    #     request = self.context['request']
+    #     if order.image:
+    #         name = order.image.name
+    #         if name.startswith("static/"):
+    #             path = '/%s' % name
+    #         else:
+    #             path = '/static/%s' % name
+    #
+    #         return request.build_absolute_uri(path)
 
     class Meta:
         model = OrderDetail
@@ -116,16 +135,23 @@ class StatusSerializer(serializers.ModelSerializer):
 
 
 class ShipperReceiverSerializer(serializers.ModelSerializer):
-    order = OrderSerializers()
+    shipper_first_name = serializers.CharField(source="shipper.first_name", read_only=True)
+    shipper_last_name = serializers.CharField(source="shipper.last_name", read_only=True)
+    order = OrderSerializers(read_only=True)
+
     class Meta:
         model = ShipperReceiver
-        fields = "__all__"
+        fields = ["order", 'shipper', 'price', 'shipper_first_name', 'shipper_last_name']
 
 
 class AutionHistorySerializer(serializers.ModelSerializer):
+    order_name = serializers.CharField(source="order.order_name", read_only=True)
+    status = serializers.IntegerField(source='order.status.id', read_only=True)
+    shipper_first_name = serializers.CharField(source="shipper.first_name", read_only=True)
+    shipper_last_name = serializers.CharField(source="shipper.last_name", read_only=True)
     class Meta:
         model = AuctionHistory
-        fields = "__all__"
+        fields = ['order', 'shipper', 'price', 'order_name', 'shipper_first_name', 'shipper_last_name', 'status']
 
 
 class RatingSerializer(serializers.ModelSerializer):

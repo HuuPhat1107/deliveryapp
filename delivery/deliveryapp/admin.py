@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.contrib.auth.admin import UserAdmin
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 from .models import *
 
@@ -12,6 +14,7 @@ class AutionHistoryAdmin(admin.ModelAdmin):
 
 
 class CusUser(UserAdmin):
+
     def group(self, user):
         groups = []
         for group in user.groups.all():
@@ -20,8 +23,30 @@ class CusUser(UserAdmin):
 
     group.short_description = 'Groups'
 
-    search_fields = ['first_name', 'last_name', 'sex']
-    list_display = ['id', 'username', 'sex', 'CCCD', 'first_name', 'last_name', 'email', 'is_staff', 'group']
+    fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                    'sex',
+                    'CCCD',
+                    'avatar',
+                    'phone',
+                    'address',
+                ),
+            },
+        ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+    )
+    search_fields = ['first_name', 'last_name', 'sex', 'is_active']
+    list_display = ['id', 'username', 'sex', 'CCCD', 'first_name', 'last_name', 'email', 'is_staff', 'group', "is_active"]
 
 
 class OrderAdmin(admin.ModelAdmin):

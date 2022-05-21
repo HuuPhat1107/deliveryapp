@@ -69,7 +69,7 @@ class Address(models.Model):
 
 
 class OrderDetail(ModelBase):
-    order = models.OneToOneField(Order, on_delete=models.CASCADE, primary_key=True)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, primary_key=True, related_name="orderdetail")
     quality = models.IntegerField(default=1)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, upload_to='orders/%Y/%m')
