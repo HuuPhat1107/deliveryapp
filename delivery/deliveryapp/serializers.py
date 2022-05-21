@@ -20,18 +20,18 @@ class UserSerializers(serializers.ModelSerializer):
 
         return user
 
-    avatar = SerializerMethodField()
+    # avatar = SerializerMethodField()
 
-    def get_avatar(self, user):
-        request = self.context['request']
-        if user.avatar:
-            name = user.avatar.name
-            if name.startswith("static/"):
-                path = '/%s' % name
-            else:
-                path = '/static/%s' % name
-
-            return request.build_absolute_uri(path)
+    # def get_avatar(self, user):
+    #     request = self.context['request']
+    #     if user.avatar:
+    #         name = user.avatar.name
+    #         if name.startswith("static/"):
+    #             path = '/%s' % name
+    #         else:
+    #             path = '/static/%s' % name
+    #
+    #         return request.build_absolute_uri(path)
 
     cash = serializers.CharField(source='cash.cash', read_only=True)
 
@@ -51,13 +51,13 @@ class UserSerializers(serializers.ModelSerializer):
 
 
 class OrderSerializers(serializers.ModelSerializer):
+    # customer = UserSerializers()
     class Meta:
         model = Order
-        fields = ['id', 'order_name', 'customer',
-                  'created_date', 'updated_date', 'status']
+        fields = ["id", "order_name", "customer", "status"]
+
 
 class OrderStatusSerializer(serializers.ModelSerializer):
-
     quality = serializers.IntegerField(source='orderdetail.quality')
     description = serializers.CharField(source='orderdetail.description')
     note = serializers.CharField(source='orderdetail.note')
@@ -137,6 +137,17 @@ class StatusSerializer(serializers.ModelSerializer):
 class ShipperReceiverSerializer(serializers.ModelSerializer):
     shipper_first_name = serializers.CharField(source="shipper.first_name", read_only=True)
     shipper_last_name = serializers.CharField(source="shipper.last_name", read_only=True)
+
+
+    class Meta:
+        model = ShipperReceiver
+        fields = ["order", 'shipper', 'price', 'shipper_first_name', 'shipper_last_name']
+
+
+class ShipperReceiverSerializer2(serializers.ModelSerializer):
+    shipper_first_name = serializers.CharField(source="shipper.first_name", read_only=True)
+    shipper_last_name = serializers.CharField(source="shipper.last_name", read_only=True)
+
     order = OrderSerializers(read_only=True)
 
     class Meta:

@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import User, Order, OrderDetail, Status, Cash, Address, ShipperReceiver, AuctionHistory, Rating
 from .serializers import UserSerializers, OrderSerializers, OrderDetailSerializer, CashSerializer,\
-    AddressSerializer, StatusSerializer, ShipperReceiverSerializer, AutionHistorySerializer, RatingSerializer, OrderStatusSerializer
+    AddressSerializer, StatusSerializer, ShipperReceiverSerializer, ShipperReceiverSerializer2, AutionHistorySerializer, RatingSerializer, OrderStatusSerializer
 from .paginators import BasePagination
 from django.http import Http404
 from django.conf import settings
@@ -46,7 +46,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_shipper(self, request, pk):
         shipper = User.objects.get(pk=pk).ShipperReceiver.filter(active=True)
 
-        return Response(ShipperReceiverSerializer(shipper, many=True).data, status=status.HTTP_200_OK)
+        return Response(ShipperReceiverSerializer2(shipper, many=True).data, status=status.HTTP_200_OK)
 
     @action(methods=['get'], detail=True, url_path="orders_customer")
     def get_cus(self, request, pk):
@@ -132,7 +132,7 @@ class StatusViewSet(viewsets.ViewSet, generics.ListAPIView):
 
         return Response(OrderStatusSerializer(order, many=True).data, status=status.HTTP_200_OK)
 
-#
+
 class ShipperReceiverViewSet(viewsets.ModelViewSet):
     serializer_class = ShipperReceiverSerializer
     pagination_class = BasePagination
@@ -142,6 +142,7 @@ class ShipperReceiverViewSet(viewsets.ModelViewSet):
 class RatingViewSet(viewsets.ModelViewSet):
     serializer_class = RatingSerializer
     queryset = Rating.objects.all()
+
 
 class AutionViewset(viewsets.ViewSet, generics.CreateAPIView, generics.ListAPIView):
     queryset = AuctionHistory.objects.all()
