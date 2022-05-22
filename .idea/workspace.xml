@@ -6,7 +6,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delivery/delivery/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/delivery/delivery/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/migrations/0001_initial.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/delivery/deliveryapp/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/delivery/deliveryapp/views.py" afterDir="false" />
     </list>

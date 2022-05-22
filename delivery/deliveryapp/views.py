@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import User, Order, OrderDetail, Status, Cash, Address, ShipperReceiver, AuctionHistory, Rating
 from .serializers import UserSerializers, OrderSerializers, OrderDetailSerializer, CashSerializer,\
-    AddressSerializer, StatusSerializer, ShipperReceiverSerializer, ShipperReceiverSerializer2, AutionHistorySerializer, RatingSerializer, OrderStatusSerializer
+    AddressSerializer, StatusSerializer, ShipperReceiverSerializer, ShipperReceiverSerializer2, \
+    AutionHistorySerializer, RatingSerializer, OrderStatusSerializer, RatingSerializer2
 from .paginators import BasePagination
 from django.http import Http404
 from django.conf import settings
@@ -140,7 +141,7 @@ class ShipperReceiverViewSet(viewsets.ModelViewSet):
 
 
 class RatingViewSet(viewsets.ModelViewSet):
-    serializer_class = RatingSerializer
+    serializer_class = RatingSerializer2
     queryset = Rating.objects.all()
 
 

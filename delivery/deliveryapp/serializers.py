@@ -172,3 +172,8 @@ class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = "__all__"
+
+class RatingSerializer2(serializers.ModelSerializer):
+    class Meta:
+        model = Rating
+        fields = "__all__"
