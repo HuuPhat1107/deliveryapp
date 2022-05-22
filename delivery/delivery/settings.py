@@ -107,7 +107,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'deliveryapp',
         'USER': 'root',
-        'PASSWORD': 'letuandat',
+        'PASSWORD': '12345678',
         'HOST': '',
         'OPTIONS': {
          "init_command": "SET foreign_key_checks = 0;",

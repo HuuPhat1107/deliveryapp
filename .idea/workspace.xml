@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="abaf5a59-b44e-4402-9747-acc2e9f8c80f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/deliveryapp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deliveryapp.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delivery/delivery/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/delivery/delivery/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/delivery/deliveryapp/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delivery/deliveryapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/delivery/deliveryapp/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

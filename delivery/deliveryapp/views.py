@@ -115,7 +115,7 @@ class OrderDetailViewSet(viewsets.ModelViewSet):
 class CashViewSet(viewsets.ViewSet, generics.UpdateAPIView):
     queryset = Cash
     serializer_class = CashSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+        # permission_classes = (permissions.IsAuthenticated,)
 
 
 class AddressViewSet(viewsets.ViewSet, generics.ListAPIView):
